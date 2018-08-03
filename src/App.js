@@ -1,59 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-
-
-const doneness = [
-  {
-    name: "rare", text: "Rare"
-  },
-  {
-    name: "mediumRare", text: "Medium Rare"
-  },
-  {
-    name: "medium", text: "Medium"
-  },
-  {
-    name: "mediumWell", text: "Medium Well"
-  },
-  {
-    name: "wellDone", text: "Well Done"
-  }
-]
-
-const meatTypes = [
-  {
-    name: "beef", text: "Beef"
-  },
-  {
-    name: "lamb", text: "Lamb/Mutton"
-  },
-  {
-    name: "chicken", text: "Chicken"
-  },
-  {
-    name: "patties", text: "Patties"
-  }
-]
-
-const redMeatRanges = 
-{
-  "rare": "45-50",
-  "mediumRare": "55-60",
-  "medium": "60-65",
-  "mediumWell": "65-70",
-  "wellDone": "70+"
-}
-
-const chickenRanges = 
-{  
-  "wellDone": "75"
-}
-
-const pattyRanges = 
-{  
-  "wellDone": "70+"
-}
-
+import * as Data from './data';
 
 class App extends Component {
   render() {
@@ -74,13 +21,13 @@ class DonenessCalculator
       switch (meatType){
         case "beef":
         case "lamb":
-        return redMeatRanges[doneness];
+        return Data.redMeatRanges[doneness];
 
         case "chicken":
-        return chickenRanges[doneness];
+        return Data.chickenRanges[doneness];
 
         case "patties":
-        return pattyRanges[doneness];
+        return Data.pattyRanges[doneness];
         default:
           return null;
       }
@@ -95,7 +42,7 @@ class MeatChooser extends Component {
     super(props);
     this.changeDoneness = this.changeDoneness.bind(this);
     this.changeMeatType = this.changeMeatType.bind(this);
-    this.state = {targetDonenesses: doneness, meatType: this.initialMeatType, targetDoneness: this.initialDoneness};
+    this.state = {targetDonenesses: Data.doneness, meatType: this.initialMeatType, targetDoneness: this.initialDoneness};
   }
 
   componentDidMount(){    
@@ -111,16 +58,16 @@ class MeatChooser extends Component {
 
   filterDonnessesForMeatType(meatType){
       if (meatType === "chicken" || meatType === "patties"){
-        return doneness.filter(d => d.name === "wellDone")
+        return Data.doneness.filter(d => d.name === "wellDone")
       }
-      return doneness;
+      return Data.doneness;
   }
 
   changeMeatType(meatType){
-    let filteredDonnesess = this.filterDonnessesForMeatType(meatType);
-    this.setState({targetDonenesses: filteredDonnesess, targetDoneness: filteredDonnesess[0] });   
+    let targetDoneness = (meatType === "chicken" || meatType === "patties") ? "wellDone" : this.state.targetDoneness;
+    this.setState({ targetDonenesses: this.filterDonnessesForMeatType(meatType), targetDoneness: targetDoneness});   
 
-    let targetTemp = DonenessCalculator.calculateTemperature(this.state.targetDoneness, meatType);
+    let targetTemp = DonenessCalculator.calculateTemperature(targetDoneness, meatType);
     this.setState({targetTemperatureRange: targetTemp, meatType: meatType});
   } 
   
@@ -168,7 +115,7 @@ class MeatTypeChooser extends Component {
   render(){
     return (
       <select onChange={this.handleChange}>{
-        meatTypes.map((meat) => <option key={meat.name} value={meat.name}>{meat.text}</option>)
+        Data.meatTypes.map((meat) => <option key={meat.name} value={meat.name}>{meat.text}</option>)
       }</select>
    );
   }
