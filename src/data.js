@@ -15,7 +15,7 @@ export const doneness = [
     {
       name: "wellDone", text: "Well Done"
     }
-  ]
+  ]  
   
   export const meatTypes = [
     {

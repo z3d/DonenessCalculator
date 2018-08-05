@@ -15,67 +15,18 @@ class App extends Component {
   }
 }
 
-class DonenessCalculator {
-  static calculateTemperature(doneness, meatType) {
-    switch (meatType) {
-      case "beef":
-      case "lamb":
-        return Data.redMeatRanges[doneness];
-
-      case "chicken":
-        return Data.chickenRanges[doneness];
-
-      case "patties":
-        return Data.pattyRanges[doneness];
-      default:
-        return null;
-    }
-  }
-}
-
 class MeatChooser extends Component {
-  initialDoneness = "rare"
-  initialMeatType = "beef"
 
   constructor(props) {
     super(props);
-    this.changeDoneness = this.changeDoneness.bind(this);
-    this.changeMeatType = this.changeMeatType.bind(this);
-    this.state = { targetDonenesses: Data.doneness, meatType: this.initialMeatType, targetDoneness: this.initialDoneness };
-  }
-
-  componentDidMount() {
-    let targetTemp = DonenessCalculator.calculateTemperature(this.state.targetDoneness, this.state.meatType)
-    this.setState({ targetTemperatureRange: targetTemp });
-  }
-
-  changeDoneness(doneness) {
-    this.setState({ targetDoneness: doneness });
-    let targetTemp = DonenessCalculator.calculateTemperature(doneness, this.state.meatType)
-    this.setState({ targetTemperatureRange: targetTemp });
-  }
-
-  filterDonnessesForMeatType(meatType) {
-    if (meatType === "chicken" || meatType === "patties") {
-      return Data.doneness.filter(d => d.name === "wellDone")
-    }
-    return Data.doneness;
-  }
-
-  changeMeatType(meatType) {
-    let targetDoneness = (meatType === "chicken" || meatType === "patties") ? "wellDone" : this.state.targetDoneness;
-    this.setState({ targetDonenesses: this.filterDonnessesForMeatType(meatType), targetDoneness: targetDoneness });
-
-    let targetTemp = DonenessCalculator.calculateTemperature(targetDoneness, meatType);
-    this.setState({ targetTemperatureRange: targetTemp, meatType: meatType });
   }
 
   render() {
     return (
       <div>
         <MeatTypeChooser onChange={this.changeMeatType} />
-        <DonenessChooser onChange={this.changeDoneness} doneesses={this.state.targetDonenesses} />
-        <TemperatureTarget target={this.state.targetTemperatureRange} />
+        <DonenessChooser onChange={this.changeDoneness} doneesses={Data.doneness} />
+        <TemperatureTarget target={"x to y"} />
       </div>)
   }
 }
