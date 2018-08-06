@@ -39,15 +39,15 @@ const rootReducer = (state = initialState, action) => {
     switch (action.type){
         case CHANGE_MEAT_TYPE:
             return { ...state, 
-                meatType: action.payload.meatType,  
-                targetTemperatureRange: DonenessCalculator.calculateTemperature(state.doneness, action.payload.meatType),
-                donenesses: DonenessCalculator.filterDonnessesForMeatType(action.payload.meatType),
-                doneness: (action.payload.meatType === "chicken" || action.payload.meatType === "patties") ? "wellDone" : state.doneness
+                meatType: action.payload,  
+                targetTemperatureRange: DonenessCalculator.calculateTemperature(state.doneness, action.payload),
+                donenesses: DonenessCalculator.filterDonnessesForMeatType(action.payload),
+                doneness: (action.payload === "chicken" || action.payload === "patties") ? "wellDone" : state.doneness
             }           
         case CHANGE_DONENESS:
              return { ...state, 
-                doneness: action.payload.doneness,  
-                targetTemperatureRange: DonenessCalculator.calculateTemperature(action.payload.doneness, state.meatType) 
+                doneness: action.payload,  
+                targetTemperatureRange: DonenessCalculator.calculateTemperature(action.payload, state.meatType) 
             }           
          default:
             return state;

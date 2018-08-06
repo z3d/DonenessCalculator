@@ -1,6 +1,19 @@
 import React, { Component } from 'react';
 import './App.css';
 import * as Data from './data';
+import { connect } from "react-redux";
+import { changeDoneness, changeMeatType } from "./actions/index";
+
+const mapStateToProps = state => {
+  return { targetTemperatureRange: state.targetTemperatureRange, doneesses: state.donenesses };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    changeMeatType: meatType => dispatch(changeMeatType(meatType)),
+    changeDoneness: doneness => dispatch(changeDoneness(doneness))
+  };
+};
 
 class App extends Component {
   render() {
@@ -8,7 +21,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">Meat doneness calculator</h1>
-          <MeatChooser />
+          <Chooser />
         </header>
       </div>
     );
@@ -24,9 +37,9 @@ class MeatChooser extends Component {
   render() {
     return (
       <div>
-        <MeatTypeChooser onChange={this.changeMeatType} />
-        <DonenessChooser onChange={this.changeDoneness} doneesses={Data.doneness} />
-        <TemperatureTarget target={"x to y"} />
+        <MeatTypeChooser onChange={this.props.changeMeatType} />
+        <DonenessChooser doneesses={this.props.doneesses} onChange={this.props.changeDoneness} />
+        <TemperatureTarget target={this.props.targetTemperatureRange} />
       </div>)
   }
 }
@@ -55,5 +68,7 @@ const MeatTypeChooser = (props) => {
   }</select>);
 
 }
+
+const Chooser = connect(mapStateToProps, mapDispatchToProps)(MeatChooser);
 
 export default App;
