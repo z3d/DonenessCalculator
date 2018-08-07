@@ -3,9 +3,13 @@ import './App.css';
 import * as Data from './data';
 import { connect } from "react-redux";
 import { changeDoneness, changeMeatType } from "./actions/index";
+import { SelectButton } from 'primereact/selectbutton';
+import 'primereact/resources/themes/omega/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 
 const mapStateToProps = state => {
-  return { targetTemperatureRange: state.targetTemperatureRange, doneesses: state.donenesses };
+  return { targetTemperatureRange: state.targetTemperatureRange, doneesses: state.donenesses, meatType: state.meatType };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -37,7 +41,7 @@ class MeatChooser extends Component {
   render() {
     return (
       <div>
-        <MeatTypeChooser onChange={this.props.changeMeatType} />
+        <MeatTypeChooser onChange={this.props.changeMeatType} meatType = {this.props.meatType} />
         <DonenessChooser doneesses={this.props.doneesses} onChange={this.props.changeDoneness} />
         <TemperatureTarget target={this.props.targetTemperatureRange} />
       </div>)
@@ -61,12 +65,7 @@ const TemperatureTarget = (props) => {
 }
 
 const MeatTypeChooser = (props) => {
-  const handleChange = (e) => props.onChange(e.target.value);
-
-  return (<select onChange={handleChange}>{
-    Data.meatTypes.map((meat) => <option key={meat.name} value={meat.name}>{meat.text}</option>)
-  }</select>);
-
+  return <SelectButton optionLabel="text" value={props.meatType} options={Data.meatTypes} onChange={(e) =>  props.onChange(e.value.name)}></SelectButton>
 }
 
 const Chooser = connect(mapStateToProps, mapDispatchToProps)(MeatChooser);
