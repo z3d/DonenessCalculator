@@ -1,5 +1,15 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import "./App.css";
+
+const STORAGE_KEY = "doneness-calc";
+
+function loadSaved() {
+  try {
+    var saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (saved && saved.meat && saved.doneness) return saved;
+  } catch (e) { /* ignore */ }
+  return { meat: "beef", doneness: "mediumRare" };
+}
 
 const MEATS = [
   { id: "beef", label: "Beef", emoji: "🥩" },
@@ -36,8 +46,13 @@ function isFixedDoneness(meatId) {
 }
 
 export default function App() {
-  const [meat, setMeat] = useState("beef");
-  const [doneness, setDoneness] = useState("rare");
+  const saved = useMemo(loadSaved, []);
+  const [meat, setMeat] = useState(saved.meat);
+  const [doneness, setDoneness] = useState(saved.doneness);
+
+  useEffect(function () {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ meat: meat, doneness: doneness }));
+  }, [meat, doneness]);
 
   const availableDoneness = useMemo(
     () => (isFixedDoneness(meat) ? DONENESS.filter((d) => d.id === "wellDone") : DONENESS),
