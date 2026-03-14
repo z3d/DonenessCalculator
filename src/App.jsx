@@ -17,10 +17,10 @@ const DONENESS = [
 ];
 
 const TEMPS = {
-  beef: { rare: "45–50", mediumRare: "55–60", medium: "60–65", mediumWell: "65–70", wellDone: "70+" },
-  lamb: { rare: "45–50", mediumRare: "55–60", medium: "60–65", mediumWell: "65–70", wellDone: "70+" },
-  chicken: { wellDone: "75" },
-  patties: { wellDone: "70+" },
+  beef: { rare: "49–51", mediumRare: "55–57", medium: "60–63", mediumWell: "65–69", wellDone: "71+" },
+  lamb: { rare: "49–51", mediumRare: "55–57", medium: "60–63", mediumWell: "65–69", wellDone: "71+" },
+  chicken: { wellDone: "74" },
+  patties: { wellDone: "71+" },
 };
 
 const DONENESS_COLORS = {
